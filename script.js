@@ -30,31 +30,34 @@ function roundRobin(){
   for (let round = 1; round <= rounds; round++){
     const homeTeams = teams.slice(0,halfTeams);
     const awayTeams = teams.slice(halfTeams, teams.length).reverse();
+    var matchState = [];
+    for (let i = 0; i < homeTeams.length; i++){
+      matchState[i] = homeTeams[i].state;
+    }
 
     for (let i = 0; i < homeTeams.length; i++){
-      var matchState = homeTeams[i].state;
       if (awayTeams[i].state == "Descanso"){
-        matchState = "Descanso";
+        matchState[i] = "Descanso";
       }
 
       var element = homeTeams[i].state;
       var duplicates = [];
-      let index = homeTeams.map(find => find.state).indexOf(element)
+      let index = matchState.map(find => find).indexOf(element);
       while (index !== -1){
         duplicates.push(index);
-        index = homeTeams.map(find => find.state).indexOf(element, index + 1);
+        index = matchState.map(find => find).indexOf(element, index + 1);
       }
 
       var textResult;
       
-      if (duplicates.length == 2 && matchState == homeTeams[i].state){
-        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${homeTeams[i].state} - Rodada ${round} (Rodada dupla) <br>`
+      if (duplicates.length == 2 && matchState[i] == homeTeams[i].state){
+        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada dupla) <br>`
       }
-      else if (duplicates.length > 2 && matchState == homeTeams[i].state){
-        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${homeTeams[i].state} - Rodada ${round} (Rodada múltipla) <br>`
+      else if (duplicates.length > 2 && matchState[i] == homeTeams[i].state){
+        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada múltipla) <br>`
       }
       else {
-        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${homeTeams[i].state} - Rodada ${round} <br>`
+        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} <br>`
       }
 
       var print = document.querySelector("#results");
