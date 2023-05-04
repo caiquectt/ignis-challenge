@@ -49,15 +49,17 @@ function roundRobin(){
       }
 
       var textResult;
+      var homeScore = Math.floor(Math.random() * 6);
+      var awayScore = Math.floor(Math.random() * 6);
       
       if (duplicates.length == 2 && matchState[i] == homeTeams[i].state){
-        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada dupla) <br>`
+        textResult = `${homeTeams[i].name} ${homeScore} x ${awayScore} ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada dupla) <br>`
       }
       else if (duplicates.length > 2 && matchState[i] == homeTeams[i].state){
-        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada múltipla) <br>`
+        textResult = `${homeTeams[i].name} ${homeScore} x ${awayScore} ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada múltipla) <br>`
       }
       else {
-        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} <br>`
+        textResult = `${homeTeams[i].name} ${homeScore} x ${awayScore} ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} <br>`
       }
 
       var print = document.querySelector("#results");
