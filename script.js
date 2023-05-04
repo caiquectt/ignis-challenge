@@ -49,8 +49,12 @@ function roundRobin(){
       }
 
       var textResult;
-      var homeScore = Math.floor(Math.random() * 6);
-      var awayScore = Math.floor(Math.random() * 6);
+      let homeScore = 0;
+      let awayScore = 0;
+      if(matchState[i] != "Descanso"){
+        homeScore = Math.floor(Math.random() * 6);
+        awayScore = Math.floor(Math.random() * 6);
+      }
       
       if (duplicates.length == 2 && matchState[i] == homeTeams[i].state){
         textResult = `${homeTeams[i].name} ${homeScore} x ${awayScore} ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada dupla) <br>`
@@ -59,7 +63,12 @@ function roundRobin(){
         textResult = `${homeTeams[i].name} ${homeScore} x ${awayScore} ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} (Rodada múltipla) <br>`
       }
       else {
-        textResult = `${homeTeams[i].name} ${homeScore} x ${awayScore} ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} <br>`
+        if(homeTeams[i].name == "BYE" || awayTeams[i].name == "BYE"){
+          textResult = `${homeTeams[i].name} x ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} <br>`
+        }
+        else{
+          textResult = `${homeTeams[i].name} ${homeScore} x ${awayScore} ${awayTeams[i].name} - ${matchState[i]} - Rodada ${round} <br>`
+        }
       }
 
       var print = document.querySelector("#results");
