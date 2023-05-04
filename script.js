@@ -5,12 +5,12 @@ var halfTeams = 0;
 function getTeams(){
   teams = []
   let teamsToSplit = document.querySelector("#textareaTeams").value;
-  teamsInfo = teamsToSplit.split("\n");
+  let teamsInfo = teamsToSplit.split("\n");
   var filteredTeams = teamsInfo.filter(elm => elm); 
   
   if (filteredTeams.length % 2 == 1){
       filteredTeams.push("BYE;Descanso");
-    }
+  }
 
   rounds = (filteredTeams.length - 1) * 2;
   halfTeams = filteredTeams.length / 2;
@@ -20,7 +20,7 @@ function getTeams(){
         name: info.split(";")[0],
         state: info.split(";")[1]
       })
-    })
+  })
 
   roundRobin();
 }
@@ -28,34 +28,49 @@ function getTeams(){
 function roundRobin(){
 
   for (let round = 1; round <= rounds; round++){
-    const roundGames = [];
-    const firstHalf = teams.slice(0,halfTeams);
-    const secondHalf = teams.slice(halfTeams, teams.length).reverse();
+    const homeTeams = teams.slice(0,halfTeams);
+    const awayTeams = teams.slice(halfTeams, teams.length).reverse();
 
-      for (let i = 0; i < firstHalf.length; i++){
-        roundGames.push({
-          home: firstHalf[i].name,
-          away: secondHalf[i].name,
-          location: firstHalf[i].state,
-          round: round
-        })
-
-        var textResult = `${roundGames[i].home} vs ${roundGames[i].away} - ${roundGames[i].location} - Rodada ${roundGames[i].round} <br>`
-
-        var print = document.querySelector("#results");
-
-        if(round == 1 && i == 0){
-          print.innerHTML = "<br>Jogos de Ida <br>";
-        }
-        if(round == (halfTeams * 2) && i == 0){
-          print.insertAdjacentHTML('beforeend',"<br>Jogos de Returno <br>")
-        }
-
-        if (i == 0){
-        print.insertAdjacentHTML('beforeend', "<br>")
-        }
-        print.insertAdjacentHTML('beforeend', textResult);
+    for (let i = 0; i < homeTeams.length; i++){
+      var matchState = homeTeams[i].state;
+      if (awayTeams[i].state == "Descanso"){
+        matchState = "Descanso";
       }
+
+      var element = homeTeams[i].state;
+      var duplicates = [];
+      let index = homeTeams.map(find => find.state).indexOf(element)
+      while (index !== -1){
+        duplicates.push(index);
+        index = homeTeams.map(find => find.state).indexOf(element, index + 1);
+      }
+
+      var textResult;
+      
+      if (duplicates.length == 2 && matchState == homeTeams[i].state){
+        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${homeTeams[i].state} - Rodada ${round} (Rodada dupla) <br>`
+      }
+      else if (duplicates.length > 2 && matchState == homeTeams[i].state){
+        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${homeTeams[i].state} - Rodada ${round} (Rodada múltipla) <br>`
+      }
+      else {
+        textResult = `${homeTeams[i].name} vs ${awayTeams[i].name} - ${homeTeams[i].state} - Rodada ${round} <br>`
+      }
+
+      var print = document.querySelector("#results");
+
+      if(round == 1 && i == 0){
+          print.innerHTML = "<br>Jogos de Ida <br>";
+      }
+      if(round == (halfTeams * 2) && i == 0){
+        print.insertAdjacentHTML('beforeend',"<br>Jogos de Returno <br>")
+      }
+
+      if (i == 0){
+        print.insertAdjacentHTML('beforeend', "<br>")
+      }
+        print.insertAdjacentHTML('beforeend', textResult);
+    }
 
       if (round == rounds / 2){
         let hold = teams.shift();
@@ -63,13 +78,14 @@ function roundRobin(){
         teams.unshift(hold);
       }
 
-      if (round % 2 == 1){
-        teams.push(teams.shift());
-      }else{
-        let hold = teams.pop();
-        teams.push(teams.shift());
-        teams.push(teams.shift());
-        teams.unshift(hold);
-      }
+    if (round % 2 == 1){
+      teams.push(teams.shift());
+    }
+    else{
+      let hold = teams.pop();
+      teams.push(teams.shift());
+      teams.push(teams.shift());
+      teams.unshift(hold);
+    }
   }
 }
