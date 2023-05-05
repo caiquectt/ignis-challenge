@@ -11,6 +11,7 @@
 
 <body>
   <div class="container text-center w-50">
+    <h2 class="mt-2">Sistema de Pontos Corridos</h2>
     <form>
       <div class="my-2">
         <label class="label-table my-2" for="textareaTeams">
@@ -18,10 +19,19 @@
         </label>
         <textarea class="form-control" id="textareaTeams" placeholder="Exemplo: Vasco;Rio de Janeiro" rows="5"></textarea>
       </div>
-      <button class="btn btn-primary mt-2" type="button" id="buttonTeams" onclick="getTeams()">Enviar</input>
+      <button class="btn btn-success mt-2" type="button" id="buttonTeams" onclick="getTeams()">Enviar</input>
     </form>
   </div>
-  <div class="container text-center pb-5" id="results"></div>
+  <div class="container my-5">
+    <div class="row justify-content-md-center">
+      <div class="col">
+        <div class="text-center mt-4 pb-3" id="standings"></div>
+      </div>
+      <div class="col">
+        <div class="fs-4 text-center mt-4 pb-3" id="results"></div>
+      </div>
+    </div>
+  </div>
 </body>
 <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <script src="script.js"></script>
