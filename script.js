@@ -16,20 +16,11 @@ function getTeams(){
   halfTeams = filteredTeams.length / 2;
 
   filteredTeams.map((info) => {
-    if (info == "BYE;Descanso"){
-      teams.push({
-        name: info.split(";")[0],
-        state: info.split(";")[1],
-        points: null
-      })
-    }
-    else{
        teams.push({
         name: info.split(";")[0],
         state: info.split(";")[1],
         points: 0
       })
-    }
   })
     
   roundRobin();
@@ -128,47 +119,41 @@ function roundRobin(){
 }
 
 function pointsTable(){
-  let tableResults = [];
-  for (let i = 0; i < teams.length; i++){
-    tableResults[i] = teams[i].points;
-  }
-  tableResults.sort(function(a,b){
-    return a - b;
-  });
-  tableResults.reverse();
+  teams.sort(function (a,b) {
+    var x = a.points;
+    var y = b.points;
+    return x < y ? -1 : x > y ? 1 : 0
+  })
+  teams.reverse();
 
   let print = document.querySelector("#results");
 
   for (let i = 0; i < teams.length; i++){
-      let scoreToFind = tableResults[i];
-      let index = teams.map(find => find.points).indexOf(scoreToFind);
       let resultPrint;
 
-      resultPrint = `${teams[index].name} - ${teams[index].points} pontos<br>`
-      teams[index].points = null;
+      resultPrint = `${teams[i].name} - ${teams[i].points} pontos<br>`
 
       if (i == 0){
-        if (tableResults[0] == tableResults[1]){
-          let secondTeam = teams.map(find => find.points).indexOf(scoreToFind);
+        if (teams[0].points == teams[1].points){
           let x, y;
           x = Math.random();
           y = Math.random();
           if (x >= y){
-            print.innerHTML = `O time vencedor é o ${teams[index].name}!<br>`;
+            print.innerHTML = `O time vencedor é o ${teams[i].name}!<br>`;
           }
           else{
-            print.innerHTML = `O time vencedor é o ${teams[secondTeam].name}!<br>`;
+            print.innerHTML = `O time vencedor é o ${teams[i+1].name}!<br>`;
           }
           print.insertAdjacentHTML('beforeend', "(VENCEDOR DO SORTEIO DE DESEMPATE)<br><br>")
         }
         else{
-          print.innerHTML = `O time vencedor é o ${teams[index].name}!<br><br>`;
+          print.innerHTML = `O time vencedor é o ${teams[i].name}!<br><br>`;
         }
         print.insertAdjacentHTML('beforeend', "Resultados<br>")
       }
 
-    if (scoreToFind != null){
-      print.insertAdjacentHTML('beforeend', resultPrint);
-    }
+      if (teams[i].name != 'BYE'){
+        print.insertAdjacentHTML('beforeend', resultPrint);
+      }
   }
 }
